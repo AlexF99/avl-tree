@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "avl.h"
 
+//Comentario
+
 #define LENGTH 1024
 
 void processa_entradas(t_avl *avl) {
