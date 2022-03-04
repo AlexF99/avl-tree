@@ -1,11 +1,14 @@
-typedef struct t_avl
+typedef struct t_nodo
 {
     int chave;
-    int *direita, *esquerda, *pai;
-} t_avl;
+    struct t_nodo *direita, *esquerda, *pai;
+    int balanceamento;
+} t_nodo;
 
-t_avl *init_avl(t_avl *avl, int valor);
+t_nodo *novo_nodo(int chave);
 
-void insere_avl(t_avl *avl, int valor);
+t_nodo *insere_nodo(t_nodo *nodo, int chave);
 
-void remove_avl(t_avl *avl, int valor);
+void remove_nodo(t_nodo *nodo, int chave);
+
+void emordem(t_nodo *nodo);

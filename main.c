@@ -6,36 +6,41 @@
 
 #define LENGTH 1024
 
-void processa_entradas(t_avl *avl) {
+void processa_entradas(t_nodo *nodo)
+{
     char op[1];
     int chave;
 
     printf("'q+enter' para finalizar a entrada\nescreva as entradas da arvore:\n");
-    fscanf(stdin, "%s", op);
-    if (op[0] == 'q') exit(0);
-    fscanf(stdin, "%d", &chave);
-    init_avl(avl, chave);
+    scanf("%s", op);
+    if (op[0] == 'q')
+        exit(0);
+    scanf("%d", &chave);
+    nodo = novo_nodo(chave);
     while (1)
     {
-        fscanf(stdin, "%s", op);
-        switch(op[0]) {
-            case 'q':
-                exit(0);
-            case 'i':
-                fscanf(stdin, "%d", &chave);
-                insere_avl(avl, chave);
-            case 'r':
-                fscanf(stdin, "%d", &chave);
-                remove_avl(avl, chave);
+        scanf("%s", op);
+        switch (op[0])
+        {
+        case 'q':
+            emordem(nodo);
+            exit(0);
+        case 'i':
+            scanf("%d", &chave);
+            insere_nodo(nodo, chave);
+        case 'r':
+            scanf("%d", &chave);
+            remove_nodo(nodo, chave);
         }
     }
 }
 
-int main() {
+int main()
+{
 
-    t_avl *avl;
+    t_nodo *nodo;
 
-    processa_entradas(avl);
+    processa_entradas(nodo);
 
     return 0;
 }

@@ -2,19 +2,52 @@
 #include <stdlib.h>
 #include "avl.h"
 
-t_avl *init_avl(t_avl *avl, int valor) {
-    // avl->chave = valor;
-    // avl->direita = NULL;
-    // avl->esquerda = NULL;
-    // avl->pai = NULL;
-    return avl;
+t_nodo *novo_nodo(int chave)
+{
+    t_nodo *nodo = (t_nodo *)malloc(sizeof(t_nodo));
+    nodo->chave = chave;
+    nodo->esquerda = NULL;
+    nodo->direita = NULL;
+    nodo->pai = NULL;
+    nodo->balanceamento = 0;
+    return nodo;
 }
 
-void insere_avl(t_avl *avl, int valor) {
-    //codigo de insercao
+t_nodo *ajusta_avl(t_nodo*nodo) {
+    return nodo;
+}
+
+t_nodo *insere_nodo(t_nodo *nodo, int chave)
+{
+
+    if (!nodo)
+        return novo_nodo(chave);
+
+    if (chave <= nodo->chave)
+    {
+        nodo->esquerda = insere_nodo(nodo->esquerda, chave);
+        nodo->esquerda->pai = nodo;
+    }
+    else
+    {
+        nodo->direita = insere_nodo(nodo->direita, chave);
+        nodo->direita->pai = nodo;
+    }
+
+    return nodo;
+}
+
+void remove_nodo(t_nodo *nodo, int chave)
+{
     return;
 }
 
-void remove_avl(t_avl *avl, int valor) {
-    return;
+void emordem(t_nodo *nodo)
+{
+    if (nodo != NULL)
+    {
+        emordem(nodo->esquerda);
+        printf("%d\n", nodo->chave);
+        emordem(nodo->direita);
+    }
 }
