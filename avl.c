@@ -11,6 +11,7 @@ t_avl *init_avl(t_avl *avl, int valor) {
 }
 
 void insere_avl(t_avl *avl, int valor) {
+    //codigo de insercao
     return;
 }
 
