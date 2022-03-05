@@ -73,3 +73,27 @@ t_nodo * rot_esquerda(t_nodo * nodo)
 	return filho_direita;
 
 }
+
+t_nodo * rot_direita(t_nodo * nodo)
+{
+	if (nodo->esquerda)
+	{
+		// Filho da esquerda do nodo a ser rotacionado
+		t_nodo * filho_esquerda = nodo->esquerda;
+
+		// Filho da direita do nodo filho passa a ser filho da esquerda do nodo a ser rot
+		nodo->esquerda = filho_esquerda->direita;
+
+		// Ajusta os ponteiros de pai e filho
+		filho_esquerda->pai = nodo->pai;
+		nodo->pai = filho_esquerda;
+
+		if (filho_esquerda->direita != NULL)
+			filho_esquerda->direita->pai = nodo;
+
+		// Nodo rotacionado passa a ser filho da direita do nodo filho
+		filho_esquerda->direita = nodo;
+
+		return filho_esquerda;
+	}
+}
