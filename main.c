@@ -7,6 +7,7 @@
 void processa_entradas(t_nodo *nodo)
 {
     char op[1];
+    char line[LENGTH];
     int chave;
     t_nodo *nodo_excluir = NULL;
 
@@ -15,7 +16,7 @@ void processa_entradas(t_nodo *nodo)
         exit(0);
     scanf("%d", &chave);
     nodo = novo_nodo(chave);
-    while (1)
+    while (fgets(line, 1024, stdin) != NULL)
     {
         scanf("%s", op);
         switch (op[0])
@@ -37,6 +38,7 @@ void processa_entradas(t_nodo *nodo)
             break;
         }
     }
+    emordem(nodo);
 }
 
 int main()
