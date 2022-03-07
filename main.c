@@ -2,16 +2,14 @@
 #include <stdlib.h>
 #include "avl.h"
 
-//Comentario
-
 #define LENGTH 1024
 
 void processa_entradas(t_nodo *nodo)
 {
     char op[1];
     int chave;
+    t_nodo *nodo_excluir = NULL;
 
-    printf("'q+enter' para finalizar a entrada\nescreva as entradas da arvore:\n");
     scanf("%s", op);
     if (op[0] == 'q')
         exit(0);
@@ -28,18 +26,22 @@ void processa_entradas(t_nodo *nodo)
         case 'i':
             scanf("%d", &chave);
             insere_nodo(nodo, chave);
+            break;
         case 'r':
             scanf("%d", &chave);
-            remove_nodo(nodo, chave);
+            nodo_excluir = busca(nodo, chave);
+            remove_nodo(nodo, nodo_excluir);
+            break;
+        default:
+            emordem(nodo);
+            break;
         }
     }
 }
 
 int main()
 {
-
     t_nodo *nodo;
-
     processa_entradas(nodo);
 
     return 0;
