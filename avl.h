@@ -9,7 +9,7 @@ t_nodo *busca(t_nodo *no, int chave);
 
 t_nodo *novo_nodo(int chave);
 
-t_nodo *insere_nodo(t_nodo *nodo, int chave);
+t_nodo *insere_nodo(t_nodo *nodo, int chave, int * calcula_fb);
 
 t_nodo *remove_nodo(t_nodo *no, t_nodo *raiz);
 
