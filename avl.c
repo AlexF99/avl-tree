@@ -26,12 +26,19 @@ int altura(t_nodo *p)
         return hd + 1;
 }
 
+int nivel_atual(t_nodo * nodo)
+{
+	if (!nodo)
+		return -1;
+	return 1 + nivel_atual(nodo->pai);
+}
+
 void emordem(t_nodo *nodo)
 {
     if (nodo != NULL)
     {
         emordem(nodo->esquerda);
-        printf("%d\n", nodo->chave);
+        printf("%d,%d\n", nodo->chave, nivel_atual(nodo));
         emordem(nodo->direita);
     }
 }
