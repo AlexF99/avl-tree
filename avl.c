@@ -13,16 +13,6 @@ t_nodo *novo_nodo(int chave)
     return nodo;
 }
 
-void emordem(t_nodo *nodo)
-{
-    if (nodo != NULL)
-    {
-        emordem(nodo->esquerda);
-        printf("%d\n", nodo->chave);
-        emordem(nodo->direita);
-    }
-}
-
 int altura(t_nodo *p)
 {
     int he, hd;
@@ -34,6 +24,16 @@ int altura(t_nodo *p)
         return he + 1;
     else
         return hd + 1;
+}
+
+void emordem(t_nodo *nodo)
+{
+    if (nodo != NULL)
+    {
+        emordem(nodo->esquerda);
+        printf("%d\n", nodo->chave);
+        emordem(nodo->direita);
+    }
 }
 
 t_nodo *min(t_nodo *no)
@@ -161,22 +161,41 @@ t_nodo *ajusta_avl(t_nodo *no, int *calcula_fb)
     return noAjuste;
 }
 
-t_nodo *insere_nodo(t_nodo *nodo, int chave)
+t_nodo *insere_nodo(t_nodo *nodo, int chave, int * calcula_fb)
 {
 
     if (!nodo)
-        return novo_nodo(chave);
+	{
+		*calcula_fb = 1;
+		return novo_nodo(chave);
+	}
 
     if (chave <= nodo->chave)
     {
-        nodo->esquerda = insere_nodo(nodo->esquerda, chave);
+        nodo->esquerda = insere_nodo(nodo->esquerda, chave, calcula_fb);
         nodo->esquerda->pai = nodo;
+		if (*calcula_fb)
+			nodo->balanceamento -= 1;
     }
+
     else
     {
-        nodo->direita = insere_nodo(nodo->direita, chave);
+        nodo->direita = insere_nodo(nodo->direita, chave, calcula_fb);
         nodo->direita->pai = nodo;
+
+		if (*calcula_fb)
+			nodo->balanceamento+= 1;
     }
+
+	if (*calcula_fb)
+	{
+		if (nodo->balanceamento == 0)
+			(*calcula_fb = 0);
+
+		if (nodo->balanceamento == 2 || nodo->balanceamento == -2)
+			nodo = ajusta_avl(nodo, calcula_fb);
+
+	}
 
     return nodo;
 }

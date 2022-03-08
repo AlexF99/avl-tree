@@ -9,13 +9,16 @@ void processa_entradas(t_nodo *nodo)
     char op[1];
     char line[LENGTH];
     int chave;
+	int calcula_fb = 0;
     t_nodo *nodo_excluir = NULL;
 
     scanf("%s", op);
     if (op[0] == 'q')
         exit(0);
+
     scanf("%d", &chave);
     nodo = novo_nodo(chave);
+
     while (fgets(line, 1024, stdin) != NULL)
     {
         scanf("%s", op);
@@ -26,7 +29,7 @@ void processa_entradas(t_nodo *nodo)
             exit(0);
         case 'i':
             scanf("%d", &chave);
-            insere_nodo(nodo, chave);
+            nodo = insere_nodo(nodo, chave, &calcula_fb);
             break;
         case 'r':
             scanf("%d", &chave);
@@ -38,7 +41,6 @@ void processa_entradas(t_nodo *nodo)
             break;
         }
     }
-    emordem(nodo);
 }
 
 int main()
