@@ -9,7 +9,7 @@ void processa_entradas(t_nodo *nodo)
     char op[1];
     char line[LENGTH];
     int chave;
-	int calcula_fb = 0;
+    int calcula_fb = 0;
     t_nodo *nodo_excluir = NULL;
 
     scanf("%s", op);
@@ -34,13 +34,14 @@ void processa_entradas(t_nodo *nodo)
         case 'r':
             scanf("%d", &chave);
             nodo_excluir = busca(nodo, chave);
-            remove_nodo(nodo, nodo_excluir);
+            nodo = remove_nodo(nodo_excluir, nodo);
             break;
         default:
             emordem(nodo);
             break;
         }
     }
+    emordem(nodo);
 }
 
 int main()
