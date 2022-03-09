@@ -34,7 +34,7 @@ void processa_entradas(t_nodo *nodo)
         case 'r':
             scanf("%d", &chave);
             nodo_excluir = busca(nodo, chave);
-            remove_nodo(nodo, nodo_excluir);
+            nodo = remove_nodo(nodo, nodo_excluir);
             break;
         default:
             emordem(nodo);

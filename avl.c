@@ -96,23 +96,26 @@ t_nodo *ajustaFBalanceamentoPai(t_nodo *p)
 
 t_nodo *rot_esquerda(t_nodo *nodo)
 {
-    // Filho da direita do nodo a ser rotacionado
-    t_nodo *filho_direita = nodo->direita;
+    if(nodo->direita)
+    {
+        // Filho da direita do nodo a ser rotacionado
+        t_nodo *filho_direita = nodo->direita;
 
-    // Filho da esqueda do nodo filho passa a ser filho da direita do nodo a ser rot
-    nodo->direita = filho_direita->esquerda;
+        // Filho da esqueda do nodo filho passa a ser filho da direita do nodo a ser rot
+        nodo->direita = filho_direita->esquerda;
 
-    // Ajusta os ponteiros de pai e filho
-    filho_direita->pai = nodo->pai;
-    nodo->pai = filho_direita;
+        // Ajusta os ponteiros de pai e filho
+        filho_direita->pai = nodo->pai;
+        nodo->pai = filho_direita;
 
-    if (filho_direita->esquerda != NULL)
-        filho_direita->esquerda->pai = nodo;
+        if (filho_direita->esquerda != NULL)
+            filho_direita->esquerda->pai = nodo;
 
-    // Nodo rotacionado passa a ser filho da esq do nodo filho
-    filho_direita->esquerda = nodo;
+        // Nodo rotacionado passa a ser filho da esq do nodo filho
+        filho_direita->esquerda = nodo;
 
-    return filho_direita;
+        return filho_direita;
+    }
 }
 
 t_nodo *rot_direita(t_nodo *nodo)
