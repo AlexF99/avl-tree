@@ -26,11 +26,11 @@ int altura(t_nodo *p)
         return hd + 1;
 }
 
-int nivel_atual(t_nodo * nodo)
+int nivel_atual(t_nodo *nodo)
 {
-	if (!nodo)
-		return -1;
-	return 1 + nivel_atual(nodo->pai);
+    if (!nodo)
+        return -1;
+    return 1 + nivel_atual(nodo->pai);
 }
 
 void emordem(t_nodo *nodo)
@@ -80,18 +80,18 @@ t_nodo *busca(t_nodo *no, int chave)
         return busca(no->direita, chave);
 }
 
-t_nodo *ajustaFBalanceamentoPai(t_nodo *p)
+t_nodo *ajusta_fb_pai(t_nodo *pai)
 {
-    t_nodo *no = p;
-    while (no->pai != NULL && no->balanceamento != -2 && no->balanceamento != 2)
+    t_nodo *nodo = pai;
+    while (nodo->pai != NULL && nodo->balanceamento != -2 && nodo->balanceamento != 2)
     {
-        if (no->pai->esquerda == no)
-            no->pai->balanceamento++;
+        if (nodo->pai->esquerda == nodo)
+            nodo->pai->balanceamento++;
         else
-            no->pai->balanceamento--;
-        no = no->pai;
+            nodo->pai->balanceamento--;
+        nodo = nodo->pai;
     }
-    return no;
+    return nodo;
 }
 
 t_nodo *rot_esquerda(t_nodo *nodo)
@@ -141,48 +141,48 @@ t_nodo *rot_direita(t_nodo *nodo)
 
 t_nodo *ajusta_avl(t_nodo *no, int *calcula_fb)
 {
-    t_nodo *noAjuste;
+    t_nodo *nodo_ajuste;
     if (no->balanceamento == -2)
     {
         if (no->esquerda != NULL && no->esquerda->balanceamento > 0)
             no->esquerda = rot_esquerda(no->esquerda);
-        noAjuste = rot_direita(no);
+        nodo_ajuste = rot_direita(no);
     }
     else
     {
         if (no->direita->balanceamento < 0)
             no->direita = rot_direita(no->direita);
-        noAjuste = rot_esquerda(no);
+        nodo_ajuste = rot_esquerda(no);
     }
-    if (noAjuste->pai != NULL)
+    if (nodo_ajuste->pai != NULL)
     {
-        if (noAjuste->pai->esquerda == no)
-            noAjuste->pai->esquerda = noAjuste;
+        if (nodo_ajuste->pai->esquerda == no)
+            nodo_ajuste->pai->esquerda = nodo_ajuste;
         else
-            noAjuste->pai->direita = noAjuste;
+            nodo_ajuste->pai->direita = nodo_ajuste;
     }
-    noAjuste->balanceamento = 0;
-    noAjuste->esquerda->balanceamento = (altura(noAjuste->esquerda->direita) - altura(noAjuste->esquerda->esquerda));
-    noAjuste->direita->balanceamento = (altura(noAjuste->direita->direita) - altura(noAjuste->direita->esquerda));
+    nodo_ajuste->balanceamento = 0;
+    nodo_ajuste->esquerda->balanceamento = (altura(nodo_ajuste->esquerda->direita) - altura(nodo_ajuste->esquerda->esquerda));
+    nodo_ajuste->direita->balanceamento = (altura(nodo_ajuste->direita->direita) - altura(nodo_ajuste->direita->esquerda));
     *calcula_fb = 0;
-    return noAjuste;
+    return nodo_ajuste;
 }
 
-t_nodo *insere_nodo(t_nodo *nodo, int chave, int * calcula_fb)
+t_nodo *insere_nodo(t_nodo *nodo, int chave, int *calcula_fb)
 {
 
     if (!nodo)
-	{
-		*calcula_fb = 1;
-		return novo_nodo(chave);
-	}
+    {
+        *calcula_fb = 1;
+        return novo_nodo(chave);
+    }
 
     if (chave <= nodo->chave)
     {
         nodo->esquerda = insere_nodo(nodo->esquerda, chave, calcula_fb);
         nodo->esquerda->pai = nodo;
-		if (*calcula_fb)
-			nodo->balanceamento -= 1;
+        if (*calcula_fb)
+            nodo->balanceamento -= 1;
     }
 
     else
@@ -190,24 +190,23 @@ t_nodo *insere_nodo(t_nodo *nodo, int chave, int * calcula_fb)
         nodo->direita = insere_nodo(nodo->direita, chave, calcula_fb);
         nodo->direita->pai = nodo;
 
-		if (*calcula_fb)
-			nodo->balanceamento+= 1;
+        if (*calcula_fb)
+            nodo->balanceamento += 1;
     }
 
-	if (*calcula_fb)
-	{
-		if (nodo->balanceamento == 0)
-			(*calcula_fb = 0);
+    if (*calcula_fb)
+    {
+        if (nodo->balanceamento == 0)
+            (*calcula_fb = 0);
 
-		if (nodo->balanceamento == 2 || nodo->balanceamento == -2)
-			nodo = ajusta_avl(nodo, calcula_fb);
-
-	}
+        if (nodo->balanceamento == 2 || nodo->balanceamento == -2)
+            nodo = ajusta_avl(nodo, calcula_fb);
+    }
 
     return nodo;
 }
 
-void ajustaNoPai(t_nodo *nodo, t_nodo *novo)
+void ajusta_pai(t_nodo *nodo, t_nodo *novo)
 {
     if (nodo->pai != NULL)
     {
@@ -220,89 +219,91 @@ void ajustaNoPai(t_nodo *nodo, t_nodo *novo)
     }
 }
 
-t_nodo *remove_nodo(t_nodo *no, t_nodo *raiz)
+t_nodo *remove_nodo(t_nodo *nodo, t_nodo *raiz)
 {
     int calcula_fb;
-    t_nodo *direitaSuc, *s, *novaRaiz = raiz;
-    if (no == NULL)
+    t_nodo *sucessor_direita, *s, *nova_raiz = raiz;
+    if (!nodo)
         return NULL;
-    t_nodo *noAjuste = no->pai;
-    if (no->esquerda == NULL && no->direita == NULL)
+    t_nodo *nodo_ajuste = nodo->pai;
+    if (nodo->esquerda == NULL && nodo->direita == NULL) // se for folha
     {
-        if (no == raiz)
+        if (nodo == raiz)
         {
-            free(no);
+            free(nodo);
             return NULL;
         }
-        if (no->pai->esquerda == no)
-            no->pai->balanceamento++;
+        if (nodo->pai->esquerda == nodo)
+            nodo->pai->balanceamento++;
         else
-            no->pai->balanceamento--;
-        noAjuste = ajustaFBalanceamentoPai(no->pai);
-        ajustaNoPai(no, NULL);
-        free(no);
+            nodo->pai->balanceamento--;
+        nodo_ajuste = ajusta_fb_pai(nodo->pai);
+        ajusta_pai(nodo, NULL);
+        free(nodo);
     }
     else
     {
-        if (no->esquerda == NULL)
+        if (nodo->esquerda == NULL)
         {
-            noAjuste = ajustaFBalanceamentoPai(no);
-            ajustaNoPai(no, no->direita);
-            if (no->pai == NULL)
-                novaRaiz = no->direita;
-            free(no);
+            nodo_ajuste = ajusta_fb_pai(nodo);
+            ajusta_pai(nodo, nodo->direita);
+            if (nodo->pai == NULL)
+                nova_raiz = nodo->direita;
+            free(nodo);
         }
         else
         {
-            if (no->direita == NULL)
+            if (nodo->direita == NULL)
             {
-                noAjuste = ajustaFBalanceamentoPai(no);
-                ajustaNoPai(no, no->esquerda);
-                if (no->pai == NULL)
-                    novaRaiz = no->esquerda;
-                free(no);
+                nodo_ajuste = ajusta_fb_pai(nodo);
+                ajusta_pai(nodo, nodo->esquerda);
+                if (nodo->pai == NULL)
+                    nova_raiz = nodo->esquerda;
+                free(nodo);
             }
-            else
+            else // nodo sendo excluido tem 2 filhos
             {
-                int ultimoSucessor;
-                s = sucessor(no);
-                direitaSuc = s->direita;
-                ultimoSucessor = s->esquerda == NULL && s->direita == NULL;
-                ajustaNoPai(s, s->direita);
-                s->esquerda = no->esquerda;
-                s->direita = no->direita;
-                s->balanceamento = no->balanceamento;
-                ajustaNoPai(no, s);
+                int ultimo_sucessor;
+                s = sucessor(nodo);
+                sucessor_direita = s->direita;
+                ultimo_sucessor = s->esquerda == NULL && s->direita == NULL;
+                ajusta_pai(s, s->direita);
+                s->esquerda = nodo->esquerda;
+                s->direita = nodo->direita;
+                s->balanceamento = nodo->balanceamento;
+                ajusta_pai(nodo, s);
                 s->esquerda->pai = s;
-                if (ultimoSucessor)
+                if (ultimo_sucessor)
                 {
                     s->balanceamento--;
-                    noAjuste = s;
+                    nodo_ajuste = s;
                 }
                 else
                     s->direita->pai = s;
-                if (no == raiz)
+                if (nodo == raiz)
                 {
-                    novaRaiz = s;
+                    nova_raiz = s;
                     s->pai = NULL;
                 }
-                free(no);
-                if (s->balanceamento != -2 && direitaSuc != NULL)
-                    noAjuste = ajustaFBalanceamentoPai(direitaSuc);
+                free(nodo);
+                if (s->balanceamento != -2 && sucessor_direita != NULL)
+                    nodo_ajuste = ajusta_fb_pai(sucessor_direita);
             }
         }
     }
-    while (noAjuste != NULL && (noAjuste->balanceamento == 2 || noAjuste->balanceamento == -2))
+
+    // verifica balanceamento e ajusta caso necessario
+    while (nodo_ajuste != NULL && (nodo_ajuste->balanceamento == 2 || nodo_ajuste->balanceamento == -2))
     {
         calcula_fb = 1;
-        no = ajusta_avl(noAjuste, &calcula_fb);
-        if (no->pai == NULL)
+        nodo = ajusta_avl(nodo_ajuste, &calcula_fb);
+        if (nodo->pai == NULL)
         {
-            novaRaiz = no;
-            noAjuste = NULL;
+            nova_raiz = nodo;
+            nodo_ajuste = NULL;
         }
         else
-            noAjuste = ajustaFBalanceamentoPai(noAjuste->pai);
+            nodo_ajuste = ajusta_fb_pai(nodo_ajuste->pai);
     }
-    return novaRaiz;
+    return nova_raiz;
 }
