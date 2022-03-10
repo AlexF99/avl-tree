@@ -10,6 +10,7 @@
 .env
 *.in
 *.out
+myavl
 
 # Linker output
 *.ilk
